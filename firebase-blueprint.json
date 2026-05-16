@@ -1,0 +1,42 @@
+{
+  "entities": {
+    "Note": {
+      "title": "Note",
+      "description": "Represents a single note created by a user.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Owner of the note" },
+        "title": { "type": "string", "description": "Title of the note" },
+        "content": { "type": "string", "description": "Markdown content of the note" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Last update timestamp" },
+        "isArchived": { "type": "boolean", "description": "Whether the note is archived" },
+        "isSecret": { "type": "boolean", "description": "Whether the note requires a password" },
+        "passwordPin": { "type": "string", "description": "Optional pin for secret notes" },
+        "color": { "type": "string", "description": "Optional background color accent" }
+      },
+      "required": ["userId", "content", "createdAt", "updatedAt"]
+    },
+    "UserConfig": {
+      "title": "UserConfig",
+      "description": "User specific configurations including security PIN and theme.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The user ID" },
+        "pin": { "type": "string", "description": "4-digit numeric PIN" },
+        "theme": { "type": "string", "enum": ["default", "light", "dark"], "description": "App theme preference" }
+      },
+      "required": ["userId", "pin"]
+    }
+  },
+  "firestore": {
+    "/notes/{noteId}": {
+      "schema": "Note",
+      "description": "Collection of all user notes."
+    },
+    "/userConfigs/{userId}": {
+      "schema": "UserConfig",
+      "description": "User specific configuration documents."
+    }
+  }
+}

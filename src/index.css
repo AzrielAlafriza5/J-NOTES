@@ -1,0 +1,164 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+  --radius-apple: 32px;
+  --color-ios-bg: #F2F2F7;
+  --color-ios-card: rgba(255, 255, 255, 0.72);
+  --color-ios-blue: #007AFF;
+  --color-ios-green: #34C759;
+  --color-ios-red: #FF3B30;
+  --color-ios-gold: #FFD60A;
+  --color-ios-indigo: #5856D6;
+  --color-ios-purple: #AF52DE;
+}
+
+@layer base {
+  body {
+    @apply antialiased bg-[#F2F2F7] selection:bg-blue-100;
+    -webkit-tap-highlight-color: transparent;
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+      radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+      radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+}
+
+/* iOS 26 Glassmorphism */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.glass-dark {
+  background: rgba(28, 28, 30, 0.7);
+  backdrop-filter: blur(30px) saturate(150%);
+  -webkit-backdrop-filter: blur(30px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Liquid Squircle Interaction */
+.liquid-squircle {
+  transition: all 0.5s cubic-bezier(0.2, 1, 0.2, 1);
+}
+
+.liquid-squircle:active {
+  transform: scale(0.85) translateY(4px);
+  border-radius: 45%;
+}
+
+.btn-blue-grad {
+  background: linear-gradient(135deg, #007AFF 0%, #0055FF 100%);
+  box-shadow: 0 8px 16px rgba(0, 122, 255, 0.25);
+}
+
+.btn-ai-grad {
+  background: linear-gradient(135deg, #5856D6 0%, #8E5AF7 100%);
+  box-shadow: 0 8px 16px rgba(88, 86, 214, 0.25);
+}
+
+.btn-hero-grad {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 
+    0 8px 32px 0 rgba(31, 38, 135, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  @apply transition-all duration-300 active:scale-95;
+}
+
+.btn-glass-blue {
+  background: rgba(0, 122, 255, 0.08);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(0, 122, 255, 0.15);
+  color: #007AFF;
+  @apply font-bold shadow-sm transition-all active:scale-95;
+}
+
+.btn-glass-purple {
+  background: rgba(175, 82, 222, 0.08);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(175, 82, 222, 0.15);
+  color: #AF52DE;
+  @apply font-bold shadow-sm transition-all active:scale-95;
+}
+
+.btn-glass-red {
+  background: rgba(255, 59, 48, 0.08);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 59, 48, 0.15);
+  color: #FF3B30;
+  @apply font-bold shadow-sm transition-all active:scale-95;
+}
+
+.liquid-sidebar {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.3) 100%);
+  backdrop-filter: blur(50px) saturate(220%);
+  -webkit-backdrop-filter: blur(50px) saturate(220%);
+  border-left: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: -20px 0 80px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.liquid-sidebar::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 50%);
+  animation: liquid-flow 15s infinite linear;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes liquid-flow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.calc-highlight {
+  @apply bg-green-400/10 text-green-600 px-2 py-0.5 rounded-lg font-mono font-bold text-sm tracking-tight border border-green-200/50;
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Liquid scale effect */
+.liquid-bounce {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.liquid-bounce:active {
+  transform: scale(0.9);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+@layer utilities {
+  .shadow-2x-strong {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 40px rgba(0, 0, 0, 0.1);
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "J.NOTE",
+  "description": "Digital Workspace - A minimalist note-taking app with advanced security and clean iOS aesthetic.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

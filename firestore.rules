@@ -1,0 +1,74 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Validation for Note
+    function isValidNote(data) {
+      return data.userId is string 
+          && data.userId == request.auth.uid
+          && data.title is string && data.title.size() <= 200
+          && data.content is string && data.content.size() <= 50000
+          && data.createdAt is timestamp
+          && data.updatedAt is timestamp
+          && (data.isArchived is bool || !data.keys().hasAny(['isArchived']))
+          && (data.isSecret is bool || !data.keys().hasAny(['isSecret']))
+          && (data.passwordPin is string && data.passwordPin.size() <= 10 || !data.keys().hasAny(['passwordPin']))
+          && (data.color is string && data.color.size() <= 50 || !data.keys().hasAny(['color']));
+    }
+
+    // Validation for UserConfig
+    function isValidUserConfig(data) {
+      return data.userId is string 
+          && data.userId == request.auth.uid
+          && data.pin is string && data.pin.size() == 4 && data.pin.matches('^[0-9]+$');
+    }
+
+    match /userConfigs/{userId} {
+      allow read: if isOwner(userId);
+      allow create, update: if isOwner(userId) && isValidUserConfig(incoming());
+    }
+
+    match /notes/{noteId} {
+      allow create: if isSignedIn() 
+                    && isValidId(noteId)
+                    && isValidNote(incoming())
+                    && incoming().createdAt == request.time;
+      
+      allow read: if isOwner(existing().userId);
+      
+      allow update: if isOwner(existing().userId)
+                    && isValidNote(incoming())
+                    && incoming().userId == existing().userId
+                    && incoming().createdAt == existing().createdAt
+                    && incoming().updatedAt == request.time;
+      
+      allow delete: if isOwner(existing().userId);
+    }
+  }
+}
